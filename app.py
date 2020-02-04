@@ -20,6 +20,7 @@ app = Flask(__name__)
 moment = Moment(app)
 app.config.from_object('config')
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 # TODO: connect to a local postgresql database
 
@@ -38,9 +39,13 @@ class Venue(db.Model):
     phone = db.Column(db.String(120))
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
-    # seeking talent
-    #
 
+    #website = db.Column(db.String(120))
+    #seeking_talent = db.Column(db.Boolean)
+    #seeking_description = db.Column(db.String(500))
+
+    # "genres": ["Jazz", "Reggae", "Swing", "Classical", "Folk"],
+    
     # TODO: implement any missing fields, as a database migration using Flask-Migrate
 
 class Artist(db.Model):
@@ -54,6 +59,19 @@ class Artist(db.Model):
     genres = db.Column(db.String(120))
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
+
+    # "seeking_venue": True
+    # "seeking_description": "Looking for shows to perform at in the San Francisco Bay Area!",
+    # "image_link": "https://images.unsplash.com/photo-1549213783-8284d0336c4f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&q=80",
+    # "past_shows": [{
+    #   "venue_id": 1,
+    #   "venue_name": "The Musical Hop",
+    #   "venue_image_link": "https://images.unsplash.com/photo-1543900694-133f37abaaa5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=60",
+    #   "start_time": "2019-05-21T21:30:00.000Z"
+    # }],
+    # "upcoming_shows": [],
+    # "past_shows_count": 1,
+    # "upcoming_shows_count": 0,
 
     # TODO: implement any missing fields, as a database migration using Flask-Migrate
 
