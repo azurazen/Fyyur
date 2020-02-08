@@ -39,13 +39,15 @@ class Venue(db.Model):
     state = db.Column(db.String(120))
     address = db.Column(db.String(120))
     phone = db.Column(db.String(120))
+    genres = db.Column(db.String(120))
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
-
-    #website = db.Column(db.String(120))
-    #seeking_talent = db.Column(db.Boolean)
-    #seeking_description = db.Column(db.String(500))
-
+    website = db.Column(db.String(120))
+    seeking_talent = db.Column(db.Boolean, nullable=False, default=False)
+    seeking_description = db.Column(db.String(500))
+    shows = db.relationship('Show', backref='venue')
+    past_shows_count = db.Column(db.Integer)
+    
     # "genres": ["Jazz", "Reggae", "Swing", "Classical", "Folk"],
     
     # TODO: implement any missing fields, as a database migration using Flask-Migrate
@@ -59,25 +61,24 @@ class Artist(db.Model):
     state = db.Column(db.String(120))
     phone = db.Column(db.String(120))
     genres = db.Column(db.String(120))
+    website = db.Column(db.String(500))
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
-
-    # "seeking_venue": True
-    # "seeking_description": "Looking for shows to perform at in the San Francisco Bay Area!",
-    # "image_link": "https://images.unsplash.com/photo-1549213783-8284d0336c4f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&q=80",
-    # "past_shows": [{
-    #   "venue_id": 1,
-    #   "venue_name": "The Musical Hop",
-    #   "venue_image_link": "https://images.unsplash.com/photo-1543900694-133f37abaaa5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=60",
-    #   "start_time": "2019-05-21T21:30:00.000Z"
-    # }],
-    # "upcoming_shows": [],
-    # "past_shows_count": 1,
-    # "upcoming_shows_count": 0,
+    seeking_venue = db.Column(db.Boolean, nullable=False, default=False)
+    seeking_description = db.Column(db.String(500))
+    shows = db.relationship('Show', backref='artist')
 
     # TODO: implement any missing fields, as a database migration using Flask-Migrate
 
 # TODO Implement Show and Artist models, and complete all model relationships and properties, as a database migration.
+
+class Show(db.Model):
+    __tablename__ = 'Show'
+
+    id = db.Column(db.Integer, primary_key=True)
+    venue_id = db.Column(db.Integer, db.ForeignKey('Venue.id'), nullable = False)
+    artist_id = db.Column(db.Integer, db.ForeignKey('Artist.id'), nullable = False)
+    start_time = db.Column(db.DateTime, nullable = False)
 
 #----------------------------------------------------------------------------#
 # Filters.
@@ -109,8 +110,11 @@ def index():
 def venues():
   # TODO: replace with real venues data.
   #       num_shows should be aggregated based on number of upcoming shows per venue.
+
+  # -- Venues.query.order_by(Venues.id).all()
+
   data=[{
-    "city": "San Francisco",
+    "city": "San Francisco", 
     "state": "CA",
     "venues": [{
       "id": 1,
