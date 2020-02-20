@@ -73,8 +73,20 @@
 </section>
 <section>
 	<a href="/artists/{{artist.id}}/edit"><button class="btn btn-warning btn-lg">Edit</button></a>
-	<a href="/artists/{{artist.id}}/edit"><button class="btn btn-danger btn-lg">Delete</button></a>
+	<!--<a href="/artists/{{artist.id}}/delete"><button class="btn btn-danger btn-lg">Delete</button></a>-->
+	<button class="btn btn-danger btn-lg delete-artist" data-id="{{ artist.id }}">Delete</button>
 </section>
+<script>
+	const delete_artist_button = document.querySelector('.delete-artist');
+	delete_artist_button.onclick = function(e){
+        const artist_id = delete_artist_button.dataset['id'];
+		fetch('/artists/'+artist_id+'/delete', {
+			method: 'DELETE',
+		}).then(function() {
+			window.location = "/artists"
+		})
+    };
+</script>
 
 {% endblock %}
 
